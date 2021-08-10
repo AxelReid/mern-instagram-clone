@@ -1,26 +1,52 @@
 import React, { useEffect, useState } from 'react'
 import { useGlobalContext } from '../context'
+import axios from 'axios'
 
 const Login = () => {
-  const { Instagram, Google, setGoLog } = useGlobalContext()
+  const { Instagram, Google, setGoLog, Spin } = useGlobalContext()
   const [info, setInfo] = useState({ username: '', password: '' })
   const [isValid, setValid] = useState(false)
+  const [message, setMessage] = useState({ msg: null, status: null })
+  const [loading, setLoading] = useState(false)
+  // clear message
+  useEffect(() => {
+    const wait = setTimeout(() => {
+      setMessage({ msg: null, status: null })
+    }, 3000)
+    return () => clearTimeout(wait)
+  }, [message.msg])
   // send info to api
-  const formSubmit = (e) => {
+  const formSubmit = async (e) => {
+    setLoading(true)
     e.preventDefault()
     if (!isValid) return
-    console.log(info)
+    try {
+      const data = await axios.post('/api/user/login', info)
+      const token = data.headers.auth_token
+      console.log(data)
+      localStorage.setItem('auth_token', token)
+      setTimeout(() => {
+        setMessage({ msg: data.data.msg, status: data.data.status })
+        setLoading(false)
+        window.location.reload()
+      }, 1000)
+    } catch (error) {
+      setMessage({ msg: error.response.data, status: error.response.status })
+      setLoading(false)
+    }
   }
   // handle values
   const handleInput = ({ name, value }) => {
     setInfo((prev) => {
-      return { ...prev, [name]: value }
+      return { ...prev, [name]: value.trim().toLowerCase().replace(/\s/g, '') }
     })
   }
   // constant checkout
   useEffect(() => {
     const validInput = Object.entries(info).find(
-      (e) => e[1].length < 3 || e[1].length > 10
+      (e) =>
+        e[1].trim().toLowerCase().replace(/\s/g, '').length < 3 ||
+        e[1].trim().toLowerCase().replace(/\s/g, '').length > 30
     )
     setValid(!validInput ? true : false)
   }, [info])
@@ -42,13 +68,28 @@ const Login = () => {
             />
             <input
               name='password'
-              type='text'
+              type='password'
               placeholder='Password'
               value={info.password}
               onChange={(e) => handleInput(e.target)}
             />
-            <button disabled={!isValid ? true : false}>Sign up</button>
+            {loading ? (
+              <button className='spin-btn' disabled>
+                <Spin />
+              </button>
+            ) : (
+              <button disabled={!isValid ? true : false}>Login</button>
+            )}
           </form>
+          {message.msg && (
+            <p
+              className={`alert ${
+                message.status === 200 || (message.status === 201 && 'success')
+              }`}
+            >
+              {message.msg}
+            </p>
+          )}
           <div className='divider'>
             <span></span>
             <h2>OR</h2>

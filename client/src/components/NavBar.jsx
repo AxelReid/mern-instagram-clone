@@ -2,6 +2,12 @@ import React from 'react'
 import { useGlobalContext } from '../context'
 
 const Nav = () => {
+  const logout = () => {
+    localStorage.removeItem('auth_token')
+    setTimeout(() => {
+      window.location.reload()
+    }, 500)
+  }
   const { Instagram, HomeIcon, SearchIcon } = useGlobalContext()
   return (
     <header className='nav-bar'>
@@ -17,7 +23,7 @@ const Nav = () => {
           <i className='search-icon'>
             <HomeIcon />
           </i>
-          <i className='avatar'>
+          <i className='avatar' onClick={() => logout()}>
             <div></div>
           </i>
         </nav>

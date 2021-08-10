@@ -8,12 +8,11 @@ import NavBar from './components/NavBar'
 import { useGlobalContext } from './context'
 
 function App() {
-  const logged = false
   const location = useLocation()
-  const { goLog } = useGlobalContext()
+  const { goLog, isUser } = useGlobalContext()
   return (
     <main>
-      {logged ? (
+      {isUser ? (
         <>
           <NavBar />
           <Switch location={location} key={location.pathname}>

@@ -34,8 +34,6 @@ const register = async (req, res) => {
     const token = jwt.sign({ id: newUser._id }, process.env.TOKEN_SECRET, {
       expiresIn: 72000,
     })
-    const { 'auth-token': gotToken } = req.headers
-    console.log(gotToken)
     res
       .status(201)
       .header('auth_token', token)
@@ -46,7 +44,19 @@ const register = async (req, res) => {
 }
 // LOGIN TO ACCOUNT
 const login = async (req, res) => {
-  res.send('Login')
+  const { username, password } = req.body
+  // username exists?
+  const user = await User.findOne({ username: username })
+  if (!user) return res.status(400).send('User does not exist!')
+  // compare password
+  const validPass = await (password === user.password)
+  if (!validPass) return res.status(400).send('password is wrong')
+  const token = jwt.sign(
+    { id: user._id },
+    process.env.TOKEN_SECRET,
+    { expiresIn: 72000 } // an hour
+  )
+  res.header('auth_token', token).send(token)
 }
 // EDIT ACCOUNT
 const edit = async (req, res) => {
