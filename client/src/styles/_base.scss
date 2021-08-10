@@ -1,0 +1,30 @@
+$body-bg: #fafafa;
+$bg-white: #fff;
+$primary-color: #262626;
+$light-color: #fff;
+$secondary-color: #8e8e8e;
+$default-blue: #0095f6;
+$dark-blue: #385185;
+$font-size-default: 14px;
+$font-size-big: 17px;
+$font-size-small: 12px;
+$border-color: #dbdbdb;
+$input-focus-color: #aaaaaa;
+
+@mixin flexBox($align, $justify) {
+  display: flex;
+  align-items: $align;
+  justify-content: $justify;
+}
+
+div.container {
+  width: 100%;
+  max-width: 950px;
+  margin: 0 auto;
+}
+@mixin register_layout {
+  width: 100%;
+  max-width: 350px;
+  background: $bg-white;
+  border: 1px solid $border-color;
+}

@@ -1,0 +1,59 @@
+header.nav-bar {
+  width: 100%;
+  height: 55px;
+  position: relative;
+  padding: 0 20px;
+  background: $bg-white;
+  @include flexBox(center, center);
+  border-bottom: 1px solid $border-color;
+  .container {
+    @include flexBox(center, space-between);
+    i.insta {
+      img {
+        width: 103px;
+      }
+    }
+    .search-div {
+      position: relative;
+      width: 215px;
+      height: 28px;
+      padding: 0 5px;
+      border: 1px solid $border-color;
+      background: $body-bg;
+      @include flexBox(center, center);
+      .search-icon {
+        pointer-events: none;
+        opacity: 0.5;
+      }
+      input {
+        width: 40%;
+        transition: 0.3s;
+        height: 100%;
+        border: none;
+        padding: 0 5px;
+        background: none;
+        outline: none;
+        color: $primary-color;
+        &::placeholder {
+          color: $secondary-color;
+        }
+        &:focus {
+          width: 90%;
+        }
+      }
+    }
+    nav {
+      @include flexBox(center, auto);
+      gap: 20px;
+      i {
+        font-size: 23px;
+      }
+      .avatar {
+        width: 23px;
+        height: 23px;
+        background: $primary-color;
+        border-radius: 50%;
+      }
+    }
+  }
+}
