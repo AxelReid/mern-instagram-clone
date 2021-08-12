@@ -23,13 +23,11 @@ const Login = () => {
     try {
       const data = await axios.post('/api/user/login', info)
       const token = data.headers.auth_token
-      console.log(data)
       localStorage.setItem('auth_token', token)
-      setTimeout(() => {
-        setMessage({ msg: data.data.msg, status: data.data.status })
-        setLoading(false)
-        window.location.reload()
-      }, 1000)
+      localStorage.setItem('user_ID', data.data.id)
+      setMessage({ msg: data.data.msg, status: data.status })
+      setLoading(false)
+      window.location.reload()
     } catch (error) {
       setMessage({ msg: error.response.data, status: error.response.status })
       setLoading(false)

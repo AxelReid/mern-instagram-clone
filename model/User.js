@@ -19,16 +19,23 @@ const userSchema = new mongoose.Schema({
     min: 3,
     max: 10,
   },
+  fullname: {
+    type: String,
+    required: true,
+    min: 3,
+    max: 20,
+  },
   bio: {
     type: String,
     min: 3,
     max: 200,
+    default: '',
   },
   followers: {
     type: Object,
     default: [],
   },
-  followings: {
+  following: {
     type: Object,
     default: [],
   },

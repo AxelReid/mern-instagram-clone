@@ -1,6 +1,9 @@
 @import './base';
 @import './nav-bar';
 @import './register';
+@import './profile';
+@import './edit';
+
 * {
   margin: 0;
   padding: 0;
@@ -15,4 +18,21 @@ body {
   color: $primary-color;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
     Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+div.container {
+  position: relative;
+  width: 100%;
+  max-width: 950px;
+  margin: 0 auto;
+}
+.page-loading {
+  width: 100%;
+  height: 100vh;
+  background: $body-bg;
+  @include flexBox(center, center);
+  img {
+    width: 100px;
+    filter: saturate(0);
+    opacity: 0.4;
+  }
 }

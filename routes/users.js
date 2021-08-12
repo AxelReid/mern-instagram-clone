@@ -56,11 +56,47 @@ const login = async (req, res) => {
     process.env.TOKEN_SECRET,
     { expiresIn: 72000 } // an hour
   )
-  res.header('auth_token', token).send(token)
+  res.header('auth_token', token).json({ msg: 'Logged in!', id: user._id })
 }
 // EDIT ACCOUNT
 const edit = async (req, res) => {
-  res.send('Edit')
+  try {
+    const user = await User.findOneAndUpdate(
+      { _id: req.params.id },
+      { $set: req.body },
+      {
+        new: true,
+        runValidators: true,
+      }
+    )
+    if (!user) return res.status(404).send('User not found')
+    res.status(200).json({ msg: 'Account Updated', data: user })
+  } catch (error) {
+    res.status(500).send(error)
+  }
+}
+// EDIT PASSWORD
+const edit_password = async (req, res) => {
+  const { id } = req.params
+  const { old_password, new_password } = req.body
+  const user = await User.findOne({ _id: id })
+  if (!user) return res.status(404).send('No user found')
+  // compare pass
+  if (user.password !== old_password)
+    return res.status(400).send('Incorrect old password')
+  try {
+    await user.updateOne(
+      { $set: { password: new_password } },
+      {
+        new: true,
+        runValidators: true,
+      }
+    )
+    const got_user = await User.findOne({ _id: id })
+    res.status(200).json({ msg: 'Password changed!', data: got_user })
+  } catch (error) {
+    res.status(500).send(error)
+  }
 }
 // DELETE ACCOUNT
 const remove = async (req, res) => {
@@ -79,7 +115,8 @@ router
   .get('/all', allUsers)
   .post('/register', register)
   .post('/login', login)
-  .patch('/edit', edit)
+  .patch('/edit/:id', edit)
+  .patch('/password/edit/:id', edit_password)
   .delete('/delete/:id', remove)
 
 module.exports = router

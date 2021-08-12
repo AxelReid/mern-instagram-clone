@@ -4,7 +4,12 @@ import axios from 'axios'
 
 const Register = () => {
   const { Instagram, Google, setGoLog, Spin } = useGlobalContext()
-  const [info, setInfo] = useState({ email: '', username: '', password: '' })
+  const [info, setInfo] = useState({
+    fullname: '',
+    email: '',
+    username: '',
+    password: '',
+  })
   const [isValid, setValid] = useState(false)
   const [message, setMessage] = useState({ msg: null, status: null })
   const [loading, setLoading] = useState(false)
@@ -24,11 +29,10 @@ const Register = () => {
       const data = await axios.post('/api/user/register', info)
       const token = data.headers.auth_token
       localStorage.setItem('auth_token', token)
-      setTimeout(() => {
-        setMessage({ msg: data.data.msg, status: data.data.status })
-        setLoading(false)
-        window.location.reload()
-      }, 1000)
+      localStorage.setItem('user_ID', data.data.data._id)
+      setMessage({ msg: data.data.msg, status: data.data.status })
+      setLoading(false)
+      window.location.reload()
     } catch (error) {
       setMessage({ msg: error.response.data, status: error.response.status })
       setLoading(false)
@@ -37,7 +41,13 @@ const Register = () => {
   // handle values
   const handleInput = ({ name, value }) => {
     setInfo((prev) => {
-      return { ...prev, [name]: value.trim().toLowerCase().replace(/\s/g, '') }
+      return {
+        ...prev,
+        [name]:
+          name !== 'fullname'
+            ? value.trim().toLowerCase().replace(/\s/g, '')
+            : value.trim(),
+      }
     })
   }
   // constant checkout
@@ -72,6 +82,12 @@ const Register = () => {
           </div>
         </nav>
         <form onSubmit={formSubmit}>
+          <input
+            name='fullname'
+            type='text'
+            placeholder='Fullname'
+            onChange={(e) => handleInput(e.target)}
+          />
           <input
             name='email'
             type='email'
