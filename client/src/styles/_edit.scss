@@ -94,24 +94,7 @@
         }
       }
       button {
-        cursor: pointer;
-        position: relative;
-        border-radius: 4px;
-        color: $bg-white;
-        font-size: $font-size-default;
-        font-weight: 600;
-        background: $default-blue;
-        border: none;
-        height: 32px;
-        width: 65px;
         margin: 10px 0 40px 180px;
-        .spin {
-          height: 70%;
-        }
-        &:disabled {
-          opacity: 0.5;
-          pointer-events: none;
-        }
       }
     }
   }

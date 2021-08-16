@@ -19,7 +19,8 @@ const Nav = () => {
     localStorage.removeItem('auth_token')
     localStorage.removeItem('user_ID')
     setTimeout(() => {
-      window.location.reload()
+      window.location.pathname = '/'
+      console.log(window.location)
     }, 500)
   }
 
@@ -30,9 +31,9 @@ const Nav = () => {
   return (
     <header className='nav-bar'>
       <div className='container'>
-        <i className='insta'>
+        <a href='/' className='insta'>
           <Instagram />
-        </i>
+        </a>
         <div className='search-div'>
           <SearchIcon />
           <input type='text' placeholder='Search' />
@@ -58,7 +59,9 @@ const Nav = () => {
               className='profile-dropdown'
             >
               <div className='span'></div>
-              <Link to={'/profile/' + user_info.username}>
+              <Link
+                to={`/profile/${user_info ? user_info.username : undefined}`}
+              >
                 <span>
                   <UserIcon />
                 </span>

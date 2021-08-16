@@ -4,10 +4,12 @@ require('dotenv').config()
 const cors = require('cors')
 const connectDB = require('./db/connect')
 const usersRoute = require('./routes/users')
+const postsRoute = require('./routes/posts')
 
 app.use(cors())
 app.use(express.json())
 app.use('/api/user', usersRoute)
+app.use('/api/posts', postsRoute)
 
 const port = process.env.PORT || 5000
 

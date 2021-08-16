@@ -4,7 +4,6 @@ import { useGlobalContext } from '../context'
 
 const Edit = () => {
   const { user_info, setUser_info, Spin } = useGlobalContext()
-  const { fullname, username, bio, posts, followers, following } = user_info
   const tabs = ['edit profile', 'change password']
   const [tab_num, setTab_num] = useState(1)
   const [loading, setLoading] = useState(false)
@@ -96,7 +95,7 @@ const Edit = () => {
                 <input
                   type='text'
                   placeholder='Name'
-                  defaultValue={fullname && fullname}
+                  defaultValue={user_info && user_info.fullname}
                 />
                 <p>
                   Help people discover your account by using the name you're
@@ -113,7 +112,7 @@ const Edit = () => {
                 <input
                   type='text'
                   placeholder='Username'
-                  defaultValue={username && username}
+                  defaultValue={user_info && user_info.username}
                 />
                 <p>
                   In most cases, you'll be able to change your username back to
@@ -127,7 +126,7 @@ const Edit = () => {
                 <textarea
                   type='text'
                   placeholder='Bio'
-                  defaultValue={bio && bio}
+                  defaultValue={user_info && user_info.bio}
                 ></textarea>
                 <p>
                   <b>Personal Information</b>
@@ -139,7 +138,7 @@ const Edit = () => {
                 </p>
               </div>
             </section>
-            <button className='submit-edit' disabled={loading ? true : false}>
+            <button className='styled' disabled={loading ? true : false}>
               {loading ? <Spin /> : 'Submit'}
             </button>
           </form>
@@ -150,7 +149,7 @@ const Edit = () => {
               <div className='img-div'>
                 <div></div>
               </div>
-              <h4>{username && username}</h4>
+              <h4>{user_info && user_info.username}</h4>
             </div>
             <section>
               <h4>old password</h4>
@@ -170,7 +169,7 @@ const Edit = () => {
                 <input type='password' />
               </div>
             </section>
-            <button className='submit-edit' disabled={loading ? true : false}>
+            <button className='styled' disabled={loading ? true : false}>
               {loading ? <Spin /> : 'Save'}
             </button>
           </form>

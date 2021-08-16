@@ -1,0 +1,75 @@
+div.container.home-page {
+  @include flexBox(flex-start, center);
+  gap: 30px;
+  article.post {
+    min-width: 600px;
+    @media (max-width: 970px) {
+      min-width: auto;
+      width: 100%;
+    }
+  }
+  .suggestions {
+    position: sticky;
+    top: 55px + 30px;
+    right: 0;
+    flex: 1 1 auto;
+    .visit-user,
+    p {
+      font-size: $font-size-default;
+    }
+    .visit-user {
+      color: $primary-color;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    p {
+      color: $secondary-color;
+    }
+    .an-account {
+      padding: 20px 0 0 0;
+      @include flexBox(center, flex-start);
+      gap: 20px;
+      .avatar {
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        background: $primary-color;
+        cursor: pointer;
+      }
+    }
+    .s-header {
+      @include flexBox(center, space-between);
+      font-weight: 600;
+      padding: 20px 0 5px 0;
+      text-transform: capitalize;
+      h4 {
+        font-size: $font-size-small;
+      }
+    }
+    .suggested-users {
+      .an-account {
+        padding: 8px 0;
+        justify-content: space-between;
+        .c-c {
+          gap: 12px;
+          @include flexBox(center, flex-start);
+        }
+        .avatar {
+          width: 32px;
+          height: 32px;
+        }
+        .visit-user {
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+        p {
+          font-size: $font-size-small;
+        }
+        button.link {
+          font-size: $font-size-small;
+        }
+      }
+    }
+  }
+}

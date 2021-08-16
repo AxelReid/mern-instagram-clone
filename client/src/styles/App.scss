@@ -3,7 +3,8 @@
 @import './register';
 @import './profile';
 @import './edit';
-
+@import './add';
+@import './home';
 * {
   margin: 0;
   padding: 0;
@@ -18,6 +19,9 @@ body {
   color: $primary-color;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
     Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+main.body {
+  padding: 55px 0 15px 0;
 }
 div.container {
   position: relative;
@@ -34,5 +38,176 @@ div.container {
     width: 100px;
     filter: saturate(0);
     opacity: 0.4;
+  }
+}
+i {
+  cursor: pointer;
+}
+.button.styled,
+button.styled {
+  cursor: pointer;
+  position: relative;
+  border-radius: 4px;
+  color: $bg-white;
+  font-size: $font-size-default;
+  font-weight: 600;
+  background: $default-blue;
+  border: none;
+  padding: 0 10px;
+  min-width: 60px;
+  height: 30px;
+  transition: 0.2s;
+  &:hover {
+    filter: brightness(0.8);
+  }
+  &:active {
+    filter: brightness(1);
+  }
+  .spin {
+    height: 70%;
+  }
+  &:disabled {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+}
+button.link {
+  cursor: pointer;
+  font-size: $font-size-default;
+  text-transform: capitalize;
+  font-weight: 600;
+  color: $default-blue;
+  border: none;
+  background: none;
+  outline: none;
+  &:disabled {
+    opacity: 0.3;
+  }
+}
+.styled.white {
+  height: 30px;
+  padding: 0 10px;
+  background: none;
+  border: 1px solid $border-color;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: $font-size-default;
+  font-weight: 600;
+  color: $primary-color;
+  @include flexBox(center, center);
+}
+.checkmark {
+  font-size: $font-size-big;
+  margin: 0 0 0 5px;
+}
+// post
+article.post {
+  position: relative;
+  width: 100%;
+  max-width: 600px;
+  margin: 30px auto 0 auto;
+  background: $bg-white;
+  border: 1px solid $border-color;
+  .post-header {
+    width: 100%;
+    height: 50px;
+    padding: 0 15px;
+    @include flexBox(center, flex-start);
+    gap: 15px;
+    .avatar-circle {
+      width: 30px;
+      height: 30px;
+      background: $primary-color;
+      border-radius: 50%;
+    }
+    p {
+      font-size: $font-size-default;
+      font-weight: 600;
+    }
+  }
+  .upload-img {
+    position: relative;
+    background: url(../assets/logo.png) no-repeat;
+    background-size: contain;
+    background-position: center;
+    width: 100%;
+    height: 400px;
+    cursor: pointer;
+    overflow: hidden;
+    .double-click-heart {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      @include flexBox(center, center);
+      color: $bg-white;
+      font-size: $font-size-monster;
+      filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.2));
+    }
+  }
+  section.no-pad-b {
+    padding: 15px 15px 0 15px;
+  }
+  section {
+    padding: 15px;
+    .post-action {
+      @include flexBox(center, flex-start);
+      gap: 10px;
+      i {
+        font-size: $font-size-huge;
+      }
+      i.liked {
+        color: $error-color;
+      }
+    }
+    .post-info {
+      font-size: $font-size-default;
+      .post-likes {
+        margin-bottom: 8px;
+      }
+      .post-caption {
+        span {
+          color: $secondary-color;
+          cursor: pointer;
+        }
+      }
+      .show-all-comments {
+        color: $secondary-color;
+        margin: 4px 0;
+      }
+      .post-date {
+        color: $secondary-color;
+        text-transform: uppercase;
+        margin: 8px 0;
+        font-size: $font-size-tiny;
+      }
+    }
+  }
+  .write-comment {
+    width: 100%;
+    height: 56px;
+    border-top: 1px solid $border-color;
+    @include flexBox(center, space-between);
+    padding: 0 15px;
+    gap: 15px;
+    i {
+      font-size: $font-size-huge;
+      cursor: pointer;
+    }
+    input {
+      flex: 1 1 auto;
+      border: none;
+      outline: none;
+    }
+  }
+}
+footer.copyright {
+  margin: 15px 0 10px 0;
+  p {
+    text-transform: uppercase;
+    color: $secondary-color;
+    opacity: 0.5;
+    font-size: 11px !important;
   }
 }
