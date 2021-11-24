@@ -1,0 +1,31 @@
+.alert {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: $bg-transparent-darker;
+  z-index: $index-top;
+  box-shadow: $light-shadow;
+  @include flexBox(center, center);
+  .alert-content {
+    background: $bg-white;
+    padding: 20px;
+    @include flexBox(center, center);
+    gap: 10px;
+    p {
+      font-size: $font-size-default;
+      color: $primary-color;
+      text-transform: capitalize;
+    }
+    p.process {
+      @include blink;
+    }
+    p.success {
+      color: $success-color;
+    }
+    p.error {
+      color: $error-color;
+    }
+  }
+}

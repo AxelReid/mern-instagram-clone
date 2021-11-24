@@ -5,6 +5,8 @@
 @import './edit';
 @import './add';
 @import './home';
+@import './alert';
+@import './media';
 * {
   margin: 0;
   padding: 0;
@@ -14,11 +16,15 @@
     box-sizing: border-box;
   }
 }
+html {
+  @include scrollbar(10px, $hover-bg, $bg-transparent, 0px);
+}
 body {
   background: $body-bg;
   color: $primary-color;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
     Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  @include scrollbar(5px, $hover-bg, $border-color, 40px);
 }
 main.body {
   padding: 55px 0 15px 0;
@@ -43,6 +49,18 @@ div.container {
 i {
   cursor: pointer;
 }
+.spin {
+  height: 20px;
+  &:disabled {
+    opacity: 0.7;
+  }
+}
+.spin.middle {
+  height: 25px;
+}
+.spin.large {
+  height: 30px;
+}
 .button.styled,
 button.styled {
   cursor: pointer;
@@ -62,9 +80,6 @@ button.styled {
   }
   &:active {
     filter: brightness(1);
-  }
-  .spin {
-    height: 70%;
   }
   &:disabled {
     opacity: 0.5;
@@ -103,31 +118,66 @@ button.link {
 // post
 article.post {
   position: relative;
-  width: 100%;
-  max-width: 600px;
+  width: 600px;
   margin: 30px auto 0 auto;
   background: $bg-white;
   border: 1px solid $border-color;
+
   .post-header {
+    position: relative;
     width: 100%;
     height: 50px;
     padding: 0 15px;
-    @include flexBox(center, flex-start);
-    gap: 15px;
-    .avatar-circle {
-      width: 30px;
-      height: 30px;
-      background: $primary-color;
-      border-radius: 50%;
+    @include flexBox(center, space-between);
+    .post-header-left {
+      position: relative;
+      @include flexBox(center, flex-start);
+      gap: 15px;
+      .avatar-circle {
+        position: relative;
+        overflow: hidden;
+        width: 30px;
+        height: 30px;
+        background: $bg-transparent;
+        border: 1px solid $border-color;
+        border-radius: 50%;
+      }
+      p {
+        font-size: $font-size-default;
+        font-weight: 600;
+      }
     }
-    p {
-      font-size: $font-size-default;
-      font-weight: 600;
+    .post-header-dots {
+      * {
+        pointer-events: none;
+      }
+    }
+    .post-dropdown {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      z-index: $index-3;
+      background: $bg-white;
+      box-shadow: $light-shadow;
+      margin: 0 15px 0 0;
+      border-radius: 3px;
+      width: 130px;
+      overflow: hidden;
+      li {
+        list-style: none;
+        font-size: $font-size-default;
+        padding: 10px 15px;
+        @include flexBox(center, flex-start);
+        gap: 10px;
+        cursor: pointer;
+        &:hover {
+          background: $hover-bg;
+        }
+      }
     }
   }
   .upload-img {
     position: relative;
-    background: url(../assets/logo.png) no-repeat;
     background-size: contain;
     background-position: center;
     width: 100%;
@@ -176,6 +226,14 @@ article.post {
         color: $secondary-color;
         margin: 4px 0;
       }
+      .post-comments {
+        position: relative;
+        max-height: 200px;
+        overflow-y: auto;
+        .a-comment {
+          margin: 0 0 5px 0;
+        }
+      }
       .post-date {
         color: $secondary-color;
         text-transform: uppercase;
@@ -210,4 +268,84 @@ footer.copyright {
     opacity: 0.5;
     font-size: 11px !important;
   }
+}
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  @include flexBox(center, center);
+  background: $bg-transparent;
+  z-index: $index-1;
+  .modal-content {
+    width: 100%;
+    max-width: 300px;
+    background: $bg-white;
+    box-shadow: $light-shadow;
+    @include flexBox(center, auto);
+    flex-direction: column;
+    .avatar-preview {
+      position: relative;
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      background: $bg-transparent;
+      margin: 20px 0;
+      overflow: hidden;
+    }
+    ul {
+      position: relative;
+      width: 100%;
+      li {
+        width: 100%;
+        border-top: 1px solid $border-color;
+        text-align: center;
+        list-style: none;
+        padding: 10px 16px;
+        font-size: $font-size-big;
+        transition: 0.3s;
+        cursor: pointer;
+        label {
+          display: block;
+        }
+        &:hover {
+          background: $hover-bg;
+        }
+      }
+    }
+  }
+}
+img.user-avatar {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: 100%;
+}
+.post-actions {
+  float: right;
+  margin: 10px 10px 0 0;
+  background: $bg-white;
+  box-shadow: $light-shadow;
+  border: 1px solid $border-color;
+  @include flexBox(center, auto);
+  width: min-content;
+}
+.close-btn {
+  background: none;
+  border: none;
+  color: $primary-color;
+  font-size: $font-size-huge;
+  cursor: pointer;
+}
+.viewing_post {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: $index-1;
+  background: $bg-transparent;
+  backdrop-filter: blur(10px);
 }

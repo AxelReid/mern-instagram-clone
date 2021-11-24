@@ -23,7 +23,28 @@ const createPost = async (req, res) => {
     res.status(500).send(error)
   }
 }
+const addComment = async (req, res) => {
+  const { id: user_ID } = req.params
+  const { post_ID, name, comment, date } = req.body
+  try {
+    const user = await User.findOneAndUpdate(
+      { _id: user_ID, 'posts.id': post_ID },
+      {
+        $push: {
+          'posts.$.comments': { name: name, comment: comment, date: date },
+        },
+      },
+      { new: true, runValidators: true }
+    )
+    if (user) res.status(200).send('new comment added')
+  } catch (error) {
+    res.status(500).send(error)
+  }
+}
 
-router.get('/all/:id', allPosts).patch('/create/:id', createPost)
+router
+  .get('/all/:id', allPosts)
+  .patch('/create/:id', createPost)
+  .patch('/comments/add/:id', addComment)
 
 module.exports = router

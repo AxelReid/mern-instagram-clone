@@ -11,6 +11,7 @@ import Edit from './pages/Edit'
 import axios from 'axios'
 import Add from './pages/Add'
 import User from './pages/User'
+import Alert from './components/Alart'
 
 function App() {
   const location = useLocation()
@@ -21,8 +22,8 @@ function App() {
     setIsUser,
     setUser_info,
     user_ID,
-    allUsers,
-    setallUsers,
+    fetch_allUsers,
+    alert_props,
   } = useGlobalContext()
   const [pageLoading, setPageLoading] = useState(true)
 
@@ -50,15 +51,6 @@ function App() {
         localStorage.removeItem('user_ID')
         window.location.pathname = '/'
       }
-    }
-  }
-
-  const fetch_allUsers = async () => {
-    try {
-      const users = await axios.get('/api/user/all')
-      setallUsers(users.data)
-    } catch (error) {
-      console.log(error)
     }
   }
 
@@ -92,6 +84,7 @@ function App() {
       <main className='body'>
         {isUser ? (
           <>
+            {alert_props.open && <Alert />}
             <NavBar />
             <Switch location={location} key={location.pathname}>
               <Route exact path='/' component={Home} />

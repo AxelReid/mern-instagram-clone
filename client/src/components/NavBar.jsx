@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useGlobalContext } from '../context'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
@@ -24,9 +24,9 @@ const Nav = () => {
     }, 500)
   }
 
-  document.body.onclick = (e) => {
+  document.body.addEventListener('click', (e) => {
     setDropdownOpen(e.target.dataset.item === 'avatar-open-btn' ? true : false)
-  }
+  })
 
   return (
     <header className='nav-bar'>
@@ -46,7 +46,9 @@ const Nav = () => {
             <PlusIcon />
           </i>
           <i className={`avatar ${dropdownOpen}`} data-item='avatar-open-btn'>
-            <div></div>
+            {user_info && user_info.avatar && (
+              <img src={user_info.avatar} className='user-avatar' />
+            )}
           </i>
         </nav>
         <AnimatePresence>

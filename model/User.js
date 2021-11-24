@@ -31,6 +31,10 @@ const userSchema = new mongoose.Schema({
     max: 200,
     default: '',
   },
+  avatar: {
+    type: String,
+    default: '',
+  },
   followers: {
     type: Object,
     default: [],
@@ -39,7 +43,7 @@ const userSchema = new mongoose.Schema({
     type: Object,
     default: [],
   },
-  posts: { type: Object, default: [] },
+  posts: { type: Object, default: [], properties: { img: { type: Buffer } } },
   date: { type: Date, default: Date.now },
 })
 

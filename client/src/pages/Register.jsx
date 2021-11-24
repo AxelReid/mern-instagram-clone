@@ -117,7 +117,7 @@ const Register = () => {
         </form>
         {message.msg && (
           <p
-            className={`alert ${
+            className={`alert-register ${
               message.status === 200 || (message.status === 201 && 'success')
             }`}
           >

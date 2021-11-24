@@ -1,13 +1,6 @@
 div.container.home-page {
   @include flexBox(flex-start, center);
   gap: 30px;
-  article.post {
-    min-width: 600px;
-    @media (max-width: 970px) {
-      min-width: auto;
-      width: 100%;
-    }
-  }
   .suggestions {
     position: sticky;
     top: 55px + 30px;
@@ -30,10 +23,12 @@ div.container.home-page {
       @include flexBox(center, flex-start);
       gap: 20px;
       .avatar {
+        position: relative;
+        overflow: hidden;
         width: 56px;
         height: 56px;
         border-radius: 50%;
-        background: $primary-color;
+        background: $bg-transparent;
         cursor: pointer;
       }
     }

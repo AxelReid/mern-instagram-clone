@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import Post from '../components/Post'
 import { useGlobalContext } from '../context'
@@ -14,25 +14,24 @@ const Home = () => {
   return (
     user_info && (
       <div className='container home-page'>
-        <div>
-          {user_info.posts.map((post) => (
-            <Post
-              key={post.id}
-              img={post.img}
-              user={user_info.username}
-              likes='0'
-              caption={post.caption}
-              date={post.date}
-            />
-          ))}
+        <div className='display-posts'>
+          {user_info.posts &&
+            user_info.posts
+              .sort((a, b) => {
+                return new Date(b.date) - new Date(a.date)
+              })
+              .map((post) => (
+                <Post key={post.id} post={post} user_ID={user_info._id} />
+              ))}
         </div>
         {sugg_Show && (
           <div className='suggestions'>
             <div className='an-account'>
-              <Link
-                to={`/profile/${user_info.username}`}
-                className='avatar'
-              ></Link>
+              <Link to={`/profile/${user_info.username}`} className='avatar'>
+                {user_info.avatar && (
+                  <img src={user_info.avatar} alt='' className='user-avatar' />
+                )}
+              </Link>
               <div className='a-info'>
                 <Link
                   className='visit-user'
@@ -57,7 +56,14 @@ const Home = () => {
                             <Link
                               to={`/user/visit/${auser.username}`}
                               className='avatar'
-                            ></Link>
+                            >
+                              {auser && auser.avatar && (
+                                <img
+                                  src={auser.avatar}
+                                  className='user-avatar'
+                                />
+                              )}
+                            </Link>
                             <div className='a-info'>
                               <Link
                                 className='visit-user'

@@ -1,9 +1,10 @@
-import React, { createContext, useContext, useEffect, useState } from 'react'
+import React, { createContext, useContext, useState } from 'react'
 import logo from './assets/logo.png'
 import instagram from './assets/txt_logo.png'
 import spin from './assets/spin.gif'
 import { Link } from 'react-router-dom'
 import { Skeleton } from '@material-ui/lab'
+import axios from 'axios'
 
 const AppContext = createContext()
 
@@ -20,7 +21,9 @@ export const AppProvider = ({ children }) => {
   )
   const Logo = () => <img src={logo} alt='' />
   const Instagram = () => <img src={instagram} alt='' />
-  const Spin = () => <img className='spin' src={spin} alt='' />
+  const Spin = (props) => (
+    <img className={`spin ${Object.keys(props)[0]}`} src={spin} alt='' />
+  )
 
   const Heart_filled = () => <ion-icon name='heart'></ion-icon>
   const Heart = () => <ion-icon name='heart-outline'></ion-icon>
@@ -34,6 +37,30 @@ export const AppProvider = ({ children }) => {
   const UploadIcon = () => <ion-icon name='cloud-upload-outline'></ion-icon>
   const SmileIcon = () => <ion-icon name='happy-outline'></ion-icon>
   const CheckMark = () => <ion-icon name='checkmark-outline'></ion-icon>
+  const Dots = () => <ion-icon name='ellipsis-vertical-outline'></ion-icon>
+  const Trash = () => <ion-icon name='trash-outline'></ion-icon>
+  const Edit = () => <ion-icon name='create-outline'></ion-icon>
+  const CheckmarkDone = () => (
+    <ion-icon name='checkmark-done-outline'></ion-icon>
+  )
+
+  const [alert_props, setalert_props] = useState({
+    open: false,
+    mssg: '',
+    status: '',
+  })
+  const handleAlert = (props) => {
+    if (props[0] === true) {
+      setalert_props({ open: true, mssg: props[1], status: '' })
+    }
+    if (props[0] === false) {
+      setalert_props({ open: true, mssg: props[1], status: props[2] })
+      const wait = setTimeout(() => {
+        setalert_props({ open: false, mssg: '', status: '' })
+      }, 1500)
+      return () => clearTimeout(wait)
+    }
+  }
 
   const user_ID = localStorage.getItem('user_ID')
   // Switch register, login
@@ -44,6 +71,15 @@ export const AppProvider = ({ children }) => {
   const [user_info, setUser_info] = useState(null)
   // all users
   const [allUsers, setallUsers] = useState([])
+  // fetch all users
+  const fetch_allUsers = async () => {
+    try {
+      const users = await axios.get('/api/user/all')
+      setallUsers(users.data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   return (
     <AppContext.Provider
@@ -65,16 +101,24 @@ export const AppProvider = ({ children }) => {
         UploadIcon,
         SmileIcon,
         CheckMark,
+        Dots,
+        Trash,
+        Edit,
+        CheckmarkDone,
 
         user_ID,
         isUser,
         user_info,
         goLog,
         allUsers,
+        alert_props,
+        setalert_props,
+        handleAlert,
         setallUsers,
         setGoLog,
         setUser_info,
         setIsUser,
+        fetch_allUsers,
 
         Skeleton,
       }}

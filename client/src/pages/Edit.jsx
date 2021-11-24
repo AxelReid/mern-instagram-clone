@@ -1,37 +1,49 @@
 import axios from 'axios'
+import { AnimatePresence } from 'framer-motion'
 import React, { useState } from 'react'
+import Avatar from '../components/Avatar'
 import { useGlobalContext } from '../context'
 
 const Edit = () => {
-  const { user_info, setUser_info, Spin } = useGlobalContext()
+  const { user_info, setUser_info, Spin, handleAlert } = useGlobalContext()
   const tabs = ['edit profile', 'change password']
   const [tab_num, setTab_num] = useState(1)
   const [loading, setLoading] = useState(false)
+  const [pic_open, setPic_open] = useState(false)
 
   const tabChange = (tab) => {
     setTab_num(tab)
   }
 
-  const formSubmit = async (e) => {
-    setLoading(true)
+  const formSubmit = (e) => {
     e.preventDefault()
     const fullname = e.target.childNodes[1].childNodes[1].childNodes[0].value
     const username = e.target.childNodes[2].childNodes[1].childNodes[0].value
     const bio = e.target.childNodes[3].childNodes[1].childNodes[0].value
     const edited = { fullname, username, bio }
-    try {
-      const data = await axios.patch('/api/user/edit/' + user_info._id, edited)
-      setUser_info(data.data.data)
-      localStorage.setItem('user_ID', data.data.data._id)
-      setLoading(false)
-    } catch (error) {
-      console.log(error)
-      setLoading(false)
+    const empty = Object.values(edited).find((v) => v === '')
+    if (empty !== undefined) {
+      handleAlert([false, 'fill all the empty spaces!', 'error'])
+      return
     }
+    handleAlert([true, 'updating...'])
+    setTimeout(async () => {
+      try {
+        const data = await axios.patch(
+          '/api/user/edit/' + user_info._id,
+          edited
+        )
+        setUser_info(data.data.data)
+        localStorage.setItem('user_ID', data.data.data._id)
+        handleAlert([false, 'updated successfully!', 'success'])
+      } catch (error) {
+        console.log(error)
+        handleAlert([false, 'somthing went wrong!', 'error'])
+      }
+    }, 1000)
   }
 
-  const changePass = async (e) => {
-    setLoading(true)
+  const changePass = (e) => {
     e.preventDefault()
     const old_password =
       e.target.childNodes[1].childNodes[1].childNodes[0].value
@@ -43,32 +55,35 @@ const Edit = () => {
     const info = { old_password, new_password }
 
     if (!old_password || !new_password || !confirm_pass) {
-      console.log('Don`t leave inputs empty')
-      setLoading(false)
-    } else {
+      handleAlert([false, 'fill all the empty spaces!', 'error'])
+      return
+    }
+    if (new_password !== confirm_pass) {
+      handleAlert([false, 'make sure both passwords match!', 'error'])
+      return
+    }
+    handleAlert([true, 'updating password...'])
+    setTimeout(async () => {
       try {
-        if (new_password !== confirm_pass) {
-          console.log('Confirmation faied')
-          setLoading(false)
-        } else {
-          const data = await axios.patch(
-            '/api/user/password/edit/' + user_info._id,
-            info
-          )
-          setUser_info(data.data.data)
-          console.log(data)
-          localStorage.setItem('user_ID', data.data.data._id)
-          setLoading(false)
-        }
+        const data = await axios.patch(
+          '/api/user/password/edit/' + user_info._id,
+          info
+        )
+        setUser_info(data.data.data)
+        localStorage.setItem('user_ID', data.data.data._id)
+        handleAlert([false, 'password changed!', 'success'])
       } catch (error) {
         console.log(error)
-        setLoading(false)
+        handleAlert([false, error.response.data, 'error'])
       }
-    }
+    }, 1000)
   }
 
   return (
     <div className='container edit'>
+      <AnimatePresence>
+        {pic_open && <Avatar setPic_open={setPic_open} />}
+      </AnimatePresence>
       <aside>
         {tabs.map((t, i) => (
           <li
@@ -85,9 +100,15 @@ const Edit = () => {
           <form className='edit-info' onSubmit={formSubmit}>
             <div className='edit-img'>
               <div className='img-div'>
-                <div></div>
+                <div>
+                  {user_info && user_info.avatar && (
+                    <img src={user_info.avatar} className='user-avatar' />
+                  )}
+                </div>
               </div>
-              <h4>change profile photo</h4>
+              <h4 onClick={() => setPic_open((prev) => !prev)}>
+                change profile photo
+              </h4>
             </div>
             <section>
               <h4>Name</h4>
@@ -139,7 +160,7 @@ const Edit = () => {
               </div>
             </section>
             <button className='styled' disabled={loading ? true : false}>
-              {loading ? <Spin /> : 'Submit'}
+              Submit
             </button>
           </form>
         )}
@@ -147,7 +168,11 @@ const Edit = () => {
           <form className='edit-info' onSubmit={changePass}>
             <div className='edit-img'>
               <div className='img-div'>
-                <div></div>
+                <div>
+                  {user_info && user_info.avatar && (
+                    <img src={user_info.avatar} className='user-avatar' />
+                  )}
+                </div>
               </div>
               <h4>{user_info && user_info.username}</h4>
             </div>

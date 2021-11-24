@@ -1,20 +1,60 @@
+import { AnimatePresence, AnimateSharedLayout, motion } from 'framer-motion'
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useGlobalContext } from '../context'
+import Post from './Post'
 
 const Profile = ({ got_user, myself }) => {
   const { PostsIcon, Skeleton, Heart, ChatIcon, CheckMark } = useGlobalContext()
   const [followed, setFollowed] = useState(false)
+  const [view_post, setViewPost] = useState(null)
+  const [dropPost, setDropPost] = useState(false)
+
   const giveFollow = () => {
     setFollowed((prev) => !prev)
   }
 
+  const postClick = (viewing_post) => {
+    setViewPost(viewing_post)
+  }
+
+  document.body.onclick = (e) => {
+    const { close, dots } = e.target.dataset
+    if (close) setViewPost(null)
+    if (dots) setDropPost(true)
+    if (dropPost) {
+      setDropPost(false)
+    }
+  }
+
   return (
     <div className='container'>
+      <AnimatePresence>
+        {view_post && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.96 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className='viewing_post'
+            data-close={true}
+          >
+            <Post
+              user_ID={got_user._id}
+              post={view_post}
+              myself={myself}
+              dropPost={dropPost}
+              setViewPost={setViewPost}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
       {got_user ? (
         <section className='profile-info'>
           <div className='p-img'>
-            <div></div>
+            <div>
+              {got_user.avatar && (
+                <img src={got_user.avatar} className='user-avatar' />
+              )}
+            </div>
           </div>
           <div className='p-right'>
             <div className='p-title'>
@@ -85,19 +125,27 @@ const Profile = ({ got_user, myself }) => {
         </div>
         <div className='my-posts'>
           {got_user &&
-            got_user.posts.map((info) => (
-              <div key={info.id} className='my-post'>
-                <img src='' alt='' />
-                <div className='my-post-review'>
-                  <p>
-                    0<Heart />
-                  </p>
-                  <p>
-                    0<ChatIcon />
-                  </p>
+            got_user.posts
+              .sort((a, b) => {
+                return new Date(b.date) - new Date(a.date)
+              })
+              .map((info) => (
+                <div
+                  key={info.id}
+                  className='my-post'
+                  onClick={() => postClick(info)}
+                >
+                  <img src={info.img} alt='' />
+                  <div className='my-post-review'>
+                    <p>
+                      0<Heart />
+                    </p>
+                    <p>
+                      0<ChatIcon />
+                    </p>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
         </div>
       </section>
     </div>

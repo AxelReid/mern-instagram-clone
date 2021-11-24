@@ -1,5 +1,5 @@
 header.nav-bar {
-  z-index: 10000;
+  z-index: $index-2;
   position: fixed;
   top: 0;
   left: 0;
@@ -59,12 +59,17 @@ header.nav-bar {
         }
       }
       .avatar {
+        position: relative;
+        overflow: hidden;
         width: 23px;
         height: 23px;
-        background: $primary-color;
+        background: $bg-transparent;
         border-radius: 50%;
         transition: 0.2s;
         cursor: pointer;
+        img {
+          pointer-events: none;
+        }
       }
       .avatar.true {
         box-shadow: 0 0 0 2px $bg-white, 0 0 0 3px $primary-color;
@@ -82,7 +87,7 @@ header.nav-bar {
       background: $bg-white;
       border-radius: 6px;
       box-shadow: $light-shadow;
-      z-index: 900;
+      z-index: $index-2;
       .span {
         position: absolute;
         top: -5px;

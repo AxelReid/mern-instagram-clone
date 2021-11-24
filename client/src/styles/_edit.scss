@@ -37,16 +37,19 @@
           width: 150px;
           @include flexBox(flex-start, flex-end);
           div {
+            position: relative;
+            overflow: hidden;
             width: 38px;
             height: 38px;
             border-radius: 50%;
-            background: $primary-color;
+            background: $bg-transparent;
           }
         }
         h4 {
           font-size: $font-size-default;
           color: $default-blue;
           text-transform: capitalize;
+          cursor: pointer;
         }
       }
       section {
